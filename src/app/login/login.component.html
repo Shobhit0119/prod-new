@@ -1,43 +1,69 @@
-<div class="login-page">
-  <div class="login-panel">
-    <div class="brand-wrap">
-      <!-- Logo: place your file at src/assets/logo.png -->
-      <img src="/assets/logo.png" alt="Prodmaster logo" class="logo" onerror="this.style.display='none'" />
-      <div class="brand-text">
-        <div class="brand-name">prodmaster</div>
+<div class="page">
+  <!-- Left branding column -->
+  <aside class="left">
+    <div class="logo-wrap">
+      <img src="/assets/logo.png" alt="Prodmaster logo" class="logo" />
+      <div class="brand">
+        <div class="name">prodmaster</div>
         <div class="slogan">Manufacturing Excellence!</div>
       </div>
     </div>
+    <div class="left-decor"><div class="glow"></div></div>
+  </aside>
 
+  <!-- Right login column -->
+  <main class="right">
     <div class="card">
-      <h1>Sign in</h1>
+      <h1>Log in</h1>
+      <p class="welcome">Welcome back!</p>
 
-      <form [formGroup]="form" (ngSubmit)="onLogin()" novalidate>
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" type="email" formControlName="email" placeholder="you@company.com">
-          <div class="error" *ngIf="email?.touched && email?.invalid">
-            <small *ngIf="email?.errors?.['required']">Email is required</small>
-            <small *ngIf="email?.errors?.['email']">Enter a valid email</small>
-          </div>
+      <form (ngSubmit)="onLogin()" #f="ngForm" novalidate>
+        <label class="label">Email</label>
+        <input type="email" name="email" [(ngModel)]="email" required class="input" placeholder="you@company.com" />
+
+        <label class="label">Password</label>
+        <input type="password" name="password" [(ngModel)]="password" required class="input" placeholder="Password" />
+
+        <div class="row">
+          <label class="remember"><input type="checkbox" name="remember" [(ngModel)]="remember" /> Remember me</label>
+          <button type="button" class="link" (click)="openForgot()">Forgot Password?</button>
         </div>
 
-        <div class="field">
-          <label for="password">Password</label>
-          <input id="password" type="password" formControlName="password" placeholder="••••••••">
-          <div class="error" *ngIf="password?.touched && password?.invalid">
-            <small *ngIf="password?.errors?.['required']">Password is required</small>
-            <small *ngIf="password?.errors?.['minlength']">Minimum 6 characters</small>
-          </div>
-        </div>
-
-        <div class="options">
-          <label class="checkbox"><input type="checkbox" formControlName="remember" /> Remember me</label>
-          <a class="link">Forgot password?</a>
-        </div>
-
-        <button type="submit" [disabled]="submitting">{{ submitting ? 'Signing in...' : 'Sign in' }}</button>
+        <button type="submit" class="submit">Sign in</button>
       </form>
+    </div>
+  </main>
+
+  <!-- Forgot Password Modal -->
+  <div class="modal-backdrop" *ngIf="showForgotModal">
+    <div class="modal-card">
+      <button class="close" (click)="closeForgot()">✕</button>
+
+      <div *ngIf="verificationStep === 0">
+        <h2>Reset Password</h2>
+        <p>Enter your account email</p>
+        <input type="email" [(ngModel)]="forgotEmail" placeholder="you@company.com" class="input" />
+        <div class="modal-actions">
+          <button (click)="sendResetLink()" class="submit">Send Reset Link</button>
+        </div>
+      </div>
+
+      <div *ngIf="verificationStep === 1">
+        <h2>Verification</h2>
+        <p>We sent a reset link (simulated). Click to enter the verification code.</p>
+        <div class="modal-actions">
+          <button (click)="startVerify()" class="submit">Enter Verification Code</button>
+        </div>
+      </div>
+
+      <div *ngIf="verificationStep === 2">
+        <h2>Enter Verification Code</h2>
+        <p>Please enter the 6-digit code.</p>
+        <input #codeInput type="text" maxlength="6" class="input" />
+        <div class="modal-actions">
+          <button (click)="verifyCode(codeInput.value)" class="submit">Verify</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
