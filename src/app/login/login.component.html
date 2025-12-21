@@ -1,39 +1,43 @@
 <div class="login-page">
-  
-  <!-- Left Side -->
-  <div class="left-side">
-    <div class="brand">ProdMaster</div>
-    <div class="icon">✓</div>
-    <p class="tagline">Production Planning & Quality Control</p>
-  </div>
+  <div class="login-panel">
+    <div class="brand-wrap">
+      <!-- Logo: place your file at src/assets/logo.png -->
+      <img src="/assets/logo.png" alt="Prodmaster logo" class="logo" onerror="this.style.display='none'" />
+      <div class="brand-text">
+        <div class="brand-name">prodmaster</div>
+        <div class="slogan">Manufacturing Excellence!</div>
+      </div>
+    </div>
 
-  <!-- Right Side -->
-  <div class="right-side">
-    <div class="login-card">
-      <h1>Log in</h1>
-      
-      <form (ngSubmit)="onLogin()">
+    <div class="card">
+      <h1>Sign in</h1>
+
+      <form [formGroup]="form" (ngSubmit)="onLogin()" novalidate>
         <div class="field">
-          <label>Email</label>
-          <input type="email" [(ngModel)]="email" name="email" placeholder="Enter your email">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email" placeholder="you@company.com">
+          <div class="error" *ngIf="email?.touched && email?.invalid">
+            <small *ngIf="email?.errors?.['required']">Email is required</small>
+            <small *ngIf="email?.errors?.['email']">Enter a valid email</small>
+          </div>
         </div>
 
         <div class="field">
-          <label>Password</label>
-          <input type="password" [(ngModel)]="password" name="password" placeholder="Enter your password">
+          <label for="password">Password</label>
+          <input id="password" type="password" formControlName="password" placeholder="••••••••">
+          <div class="error" *ngIf="password?.touched && password?.invalid">
+            <small *ngIf="password?.errors?.['required']">Password is required</small>
+            <small *ngIf="password?.errors?.['minlength']">Minimum 6 characters</small>
+          </div>
         </div>
 
         <div class="options">
-          <label class="checkbox">
-            <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe">
-            Remember me
-          </label>
-          <a href="#">Forgot Password?</a>
+          <label class="checkbox"><input type="checkbox" formControlName="remember" /> Remember me</label>
+          <a class="link">Forgot password?</a>
         </div>
 
-        <button type="submit">Log in</button>
+        <button type="submit" [disabled]="submitting">{{ submitting ? 'Signing in...' : 'Sign in' }}</button>
       </form>
     </div>
   </div>
-  
 </div>
