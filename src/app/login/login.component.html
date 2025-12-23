@@ -1,80 +1,131 @@
+<!-- Main page container with two-column layout -->
 <div class="page">
-  <!-- Left branding column -->
+  <!-- Left branding column: displays company branding and marketing content -->
   <aside class="left">
-    <!-- Top-left brand (logo + name) -->
+    <!-- Top-left brand section: logo + company name + slogan -->
     <div class="top-left-brand">
-      <!-- use SVG logo (auto-scalable and crisp) -->
+      <!-- Company logo: using SVG format for scalability and crisp display -->
       <img src="assets/logo.svg" alt="Prodmaster logo" class="logo" />
+      <!-- Brand text container -->
       <div class="brand">
+        <!-- Company name -->
         <div class="name">Prodmaster</div>
+        <!-- Company tagline/slogan -->
         <div class="slogan">Manufacturing Excellence!</div>
       </div>
     </div>
 
-    <!-- Centered heading/hero on the left for better UI balance -->
+    <!-- Centered hero section: main marketing message on the left side -->
     <div class="left-hero">
+      <!-- Primary heading: main value proposition -->
       <h2>Secure access for your team</h2>
+      <!-- Lead paragraph: describes what users can do after login -->
       <p class="lead">Sign in to manage production, planners, and reports.</p>
     </div>
 
-    <!-- Middle punch line for emphasis -->
+    <!-- Punch line section: additional emphasis text in the middle of left column -->
     <div class="left-punch">
+      <!-- Secondary heading: brand promise -->
       <h3>Streamline operations. Deliver excellence.</h3>
     </div>
 
+    <!-- Decorative element container: adds visual interest with glowing effect -->
     <div class="left-decor"><div class="glow"></div></div>
   </aside>
 
-  <!-- Right login column -->
+  <!-- Right login column: contains the actual login form -->
   <main class="right">
+    <!-- Login card: white card containing form elements -->
     <div class="card">
+      <!-- Page title -->
       <h1>Log in</h1>
+      <!-- Welcome message -->
       <p class="welcome">Welcome back!</p>
 
+      <!-- Login form: (ngSubmit) calls onLogin() when form is submitted -->
+      <!-- #f="ngForm" creates a template reference variable for the form -->
+      <!-- novalidate disables browser's default HTML5 validation -->
       <form (ngSubmit)="onLogin()" #f="ngForm" novalidate>
+        <!-- Email field label -->
         <label class="label">Email</label>
+        <!-- Email input: [(ngModel)]="email" creates two-way data binding with email property -->
+        <!-- name attribute is required for ngModel to work -->
+        <!-- required attribute marks this field as mandatory -->
         <input type="email" name="email" [(ngModel)]="email" required class="input" placeholder="you@company.com" />
 
+        <!-- Password field label -->
         <label class="label">Password</label>
+        <!-- Password input: [(ngModel)]="password" binds to password property -->
+        <!-- type="password" hides the entered text -->
         <input type="password" name="password" [(ngModel)]="password" required class="input" placeholder="Password" />
 
+        <!-- Row container: holds remember me checkbox and forgot password link side by side -->
         <div class="row">
+          <!-- Remember me checkbox with label -->
+          <!-- [(ngModel)]="remember" binds checkbox state to remember property -->
           <label class="remember"><input type="checkbox" name="remember" [(ngModel)]="remember" /> Remember me</label>
+          <!-- Forgot password link: (click) event calls openForgot() method -->
+          <!-- type="button" prevents form submission when clicked -->
           <button type="button" class="link" (click)="openForgot()">Forgot Password?</button>
         </div>
 
+        <!-- Submit button: type="submit" triggers form submission -->
         <button type="submit" class="submit">Sign in</button>
       </form>
     </div>
   </main>
 
-  <!-- Forgot Password Modal -->
+  <!-- Forgot Password Modal: shown when showForgotModal is true -->
+  <!-- *ngIf="showForgotModal" conditionally renders this element -->
   <div class="modal-backdrop" *ngIf="showForgotModal">
+    <!-- Modal card: centered white card for password reset flow -->
     <div class="modal-card">
+      <!-- Close button: X icon to close modal, calls closeForgot() -->
       <button class="close" (click)="closeForgot()">✕</button>
 
+      <!-- Step 0: Email entry step -->
+      <!-- *ngIf="verificationStep === 0" shows this div only when on step 0 -->
       <div *ngIf="verificationStep === 0">
+        <!-- Step heading -->
         <h2>Reset Password</h2>
+        <!-- Instructions for user -->
         <p>Enter your account email</p>
+        <!-- Email input: [(ngModel)]="forgotEmail" binds to forgotEmail property -->
         <input type="email" [(ngModel)]="forgotEmail" placeholder="you@company.com" class="input" />
+        <!-- Action button container -->
         <div class="modal-actions">
+          <!-- Button to send reset link: calls sendResetLink() method -->
           <button (click)="sendResetLink()" class="submit">Send Reset Link</button>
         </div>
       </div>
 
+      <!-- Step 1: Reset link sent confirmation -->
+      <!-- *ngIf="verificationStep === 1" shows this div only when on step 1 -->
       <div *ngIf="verificationStep === 1">
+        <!-- Step heading -->
         <h2>Verification</h2>
+        <!-- Confirmation message (simulated email sent) -->
         <p>We sent a reset link (simulated). Click to enter the verification code.</p>
+        <!-- Action button container -->
         <div class="modal-actions">
+          <!-- Button to proceed to code entry: calls startVerify() method -->
           <button (click)="startVerify()" class="submit">Enter Verification Code</button>
         </div>
       </div>
 
+      <!-- Step 2: Verification code entry -->
+      <!-- *ngIf="verificationStep === 2" shows this div only when on step 2 -->
       <div *ngIf="verificationStep === 2">
+        <!-- Step heading -->
         <h2>Enter Verification Code</h2>
+        <!-- Instructions for user -->
         <p>Please enter the 6-digit code.</p>
+        <!-- Code input: #codeInput creates a template reference variable -->
+        <!-- maxlength="6" limits input to 6 characters -->
         <input #codeInput type="text" maxlength="6" class="input" />
+        <!-- Action button container -->
         <div class="modal-actions">
+          <!-- Verify button: passes codeInput.value to verifyCode() method -->
           <button (click)="verifyCode(codeInput.value)" class="submit">Verify</button>
         </div>
       </div>
